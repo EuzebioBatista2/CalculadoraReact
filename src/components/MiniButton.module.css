@@ -1,0 +1,48 @@
+.button {
+    border-radius: 50%;
+    border: 0;
+    width: 15px;
+    height: 15px;
+    margin: 0 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+.button:nth-child(1):hover:before {
+    content: 'x';
+    position: absolute;
+    margin-right: 30px;
+    top: -1px;
+    left: 4px;
+    color: #790000;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.button:nth-child(2):hover:before {
+    content: '_';
+    position: absolute;
+    margin-right: 30px;
+    top: -7px;
+    left: 4px;
+    color: #818100;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    
+}
+
+.button:nth-child(3):hover:before {
+    content: '<>';
+    position: absolute;
+    margin-right: 30px;
+    top: 2px;
+    left: 2px;
+    font-size: 10px;
+    color: #008b00;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    cursor: pointer;
+}

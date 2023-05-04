@@ -1,0 +1,5 @@
+.inputs {
+    display: grid;
+    grid-template-columns: repeat(6, 16.6667%);
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+}
