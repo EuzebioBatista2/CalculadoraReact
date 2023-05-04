@@ -6,7 +6,7 @@ export default function NavBar() {
             <div className={styles.container_miniButtons}>
                 <MiniButton color="#fa5959"></MiniButton>
                 <MiniButton color="#fcbc42"></MiniButton>
-                <MiniButton color="#6cff6c"></MiniButton>
+                <MiniButton color="#29c840"></MiniButton>
             </div>
             <h1 className={styles.fonts}>Basic Mode</h1>
             <div className={styles.container_menu}>

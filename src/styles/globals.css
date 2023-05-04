@@ -73,7 +73,13 @@
   }
 }
 
+@font-face {
+  font-family: 'Roboto_Regular';
+  src: url(../../public/fonts/Roboto-Regular.ttf);
+}
+
 * {
+  font-family: 'Roboto_Regular';
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -93,6 +99,25 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0000002d;
+  border-radius: 20px;
+  
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #000;
 }
 
 a {

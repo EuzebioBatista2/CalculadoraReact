@@ -1,7 +1,9 @@
 import styles from './Button.module.css'
 export default function Button(props) {
+    let classes = `${styles.buttons}`
+    classes += props.double ? ` ${styles.double}` : ''
     return(
-        <button className={styles.buttons}>{props.numero}</button>
+        <button className={classes}  onClick={() => props.event(props.numero)}>{props.numero}</button>
     )
 
 }

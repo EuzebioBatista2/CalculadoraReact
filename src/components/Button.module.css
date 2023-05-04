@@ -9,4 +9,22 @@
     border: 1px solid #d6d6d5;
     background-color: #fff;
     color: #181818;
+    user-select: none;
+}
+
+.buttons:active {
+    background-color: #d6d6d5;
+}
+
+.double {
+    grid-column: span 2;
+    margin: 5px;
+    width: 95%;
+    background-color: #448cd6;
+    color: #fff;
+    
+}
+
+.double:active {
+    background-color: #95c4f3;
 }
