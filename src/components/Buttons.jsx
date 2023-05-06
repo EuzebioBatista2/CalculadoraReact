@@ -7,7 +7,7 @@ export default function Buttons(props) {
             <Button numero={'7'} {...props}/>
             <Button numero={'8'} {...props}/>
             <Button numero={'9'} {...props}/>
-            <Button numero={'/'} {...props}/>
+            <Button numero={'÷'} {...props}/>
             <Button numero={'DEL'} {...props}/>
             <Button numero={'C'} {...props}/>
             <Button numero={'4'} {...props}/>
@@ -20,7 +20,7 @@ export default function Buttons(props) {
             <Button numero={'2'} {...props}/>
             <Button numero={'3'} {...props}/>
             <Button numero={'-'} {...props}/>
-            <Button numero={'x²'} {...props}/>
+            <Button numero={'x^'} {...props}/>
             <Button numero={'√'} {...props}/>
             <Button numero={'0'} {...props}/>
             <Button numero={','} {...props}/>
