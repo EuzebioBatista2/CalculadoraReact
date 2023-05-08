@@ -2,12 +2,13 @@ import NavBar from '@/components/navBar'
 import Display from '@/components/Display'
 import styles from '../../styles/calculadora.module.css'
 import Buttons from '@/components/Buttons'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 const init = {
     valueReset: true,
     numbers: '0',
-    calc: ["", ""]
+    calc: ["", ""],
+    memoryCalc: ""
 }
 export default function Calculadora() {
     const [ valorDisplay, setValor ] = useState({ ...init })
@@ -16,30 +17,41 @@ export default function Calculadora() {
         const numbers = valorDisplay.numbers
         let reset = valorDisplay.valueReset
         !isNaN(value) ? valueNumber(value, reset, numbers) : 
-        valueOperation(value, numbers, reset)
+        valueOperation(value, reset, numbers)
     }
 
     function valueNumber(value, reset, numbers) {
         let listcalcs = [...valorDisplay.calc]
-        if ( !listcalcs[0].includes('√') && !listcalcs[1].includes('%') ) {
-            if(reset) {
+        if ( !listcalcs[listcalcs.length - 1].includes('√') && !listcalcs[listcalcs.length - 1].includes('%') 
+             && !listcalcs[listcalcs.length - 1].includes(')')) {
+            if(reset && !(numbers[numbers.length - 1] == '.')) {
                 numbers = value
                 reset = false
+
             } else {
                 numbers = numbers + value
             }
-            setValor({...valorDisplay, valueReset: reset, numbers: numbers})
+            if (listcalcs.join('').includes('=')) {
+                setValor({...valorDisplay, valueReset: reset, numbers: numbers, calc: ["", ""], memoryCalc: listcalcs.join('') })
+            } else {
+                setValor({...valorDisplay, valueReset: reset, numbers: numbers})
+            }
         }
     }
 
-    function valueOperation(value, numbers,  reset) {
+    function valueOperation( value, reset, numbers ) {
         let listcalcs = [...valorDisplay.calc]
+        let memory  = valorDisplay.memoryCalc
         switch(value){
             case 'C':
-                setValor({...init})
+                if(memory != '0') {
+                    setValor({valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: memory})
+                } else {
+                    setValor({...init})
+                }
                 break;
             case 'DEL':
-                if(numbers == '0' || number.length == 1) {
+                if(numbers == '0' || numbers.length == 1) {
                     setValor({...valorDisplay, valueReset: true, numbers: '0' })    
                 } else {
                     setValor({...valorDisplay, numbers: numbers.slice(0, -1) })     
@@ -49,46 +61,121 @@ export default function Calculadora() {
             case '÷':
             case '-':
             case '+':
-                if(reset == false) {
-                    listcalcs.unshift(numbers)
-                    listcalcs.unshift(` ${value} `)
+                if(listcalcs[listcalcs.length - 1].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
+                   || listcalcs[listcalcs.length - 1].includes(')')) {
+                    listcalcs.push(` ${value} `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                } else if(listcalcs[0].includes('√') || listcalcs[1].includes('%')) {
-                    listcalcs.unshift(` ${value} `)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                }
+                } else if(reset == false) {
+                    listcalcs.push(numbers)
+                    listcalcs.push(` ${value} `)
+                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs })
+                } 
                 break;    
             case '√':
-                if(reset == false && !numbers[0].includes('0')) {
-                    listcalcs.unshift(` (${numbers})√ `)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
+                if(reset == false && !numbers == '0') {
+                    listcalcs.push(` √(${numbers}) `)
+                    setValor({...valorDisplay, valueReset: false, numbers: '0' , calc: listcalcs }) 
                 }
                 break;
             case 'x^':
                 if(reset == false ) {
-                    listcalcs.unshift(numbers)
-                    listcalcs.unshift(` ^ `)
+                    listcalcs.push(numbers)
+                    listcalcs.push(` ^ `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                } else if (listcalcs[0].includes('√') || listcalcs[1].includes('%')){
-                    listcalcs.unshift(` ^ `)
+                } else if (listcalcs[listcalcs.length - 2].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
+                           || listcalcs[listcalcs.length - 1].includes(')')){
+                    listcalcs.push(` ^ `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
                 }
                 break;
             case '%':
                 if(reset == false ) {
-                    listcalcs.unshift(`${value} `)
-                    listcalcs.unshift(numbers)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
+                    listcalcs.push(numbers)
+                    listcalcs.push(`${value} `)
+                    setValor({...valorDisplay, valueReset: false, numbers: '0' , calc: listcalcs }) 
                 }
                 break;
             case ',':
-                console.log(listcalcs)
                 if(reset == false ) {
-                    listcalcs.unshift(numbers)
-                    listcalcs.unshift('.')
-                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
+                    if(!numbers.includes('.')) {
+                        numbers = numbers + '.'
+                        setValor({...valorDisplay, valueReset: false, numbers: numbers})
+                    }
                 }
                 break;
+            case '(':
+                if (numbers == '0') {
+                    if (listcalcs.join('').includes('=')) {
+                        setValor({...valorDisplay, valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: listcalcs.join('') })
+                    } else {
+                        listcalcs.push(value)
+                        setValor({...valorDisplay, valueReset: true, numbers: '0', calc: listcalcs })
+                    }
+                    
+                }
+                break;
+            case ')':
+                if(reset == false) {
+                    let limit = 0
+                    if(listcalcs.includes('(')){
+                        limit = listcalcs.join('').split('(').length - 1
+                        if( limit > listcalcs.join('').split(')').length - 1 ) {
+                            if (numbers == '0') {
+                                listcalcs.push(value)
+                            } else {
+                                listcalcs.push(numbers)
+                                listcalcs.push(value)
+                            }
+                            setValor({...valorDisplay, valueReset: false, numbers: '0', calc: listcalcs  })
+                        }
+                    }
+                }
+                break;
+            case '=':
+                if(reset == false) {
+                    if(numbers != '0') {
+                        listcalcs.push(numbers)
+                    }
+                    if(listcalcs.join('').includes('(')) {
+                        let barLeft = listcalcs.join('').split('(').length -1
+                        let barRight = listcalcs.join('').split(')').length -1
+                        if(barLeft != barRight) {
+                            while(barRight < barLeft) {
+                                barRight += 1
+                                listcalcs.push(')')
+                            }
+                        }
+                    }
+                    if(listcalcs.join('').includes('0')) {
+                        for( let values in listcalcs ) {
+                            if(!isNaN(listcalcs[values]) && listcalcs[values] != '') {
+                                listcalcs[values] = parseFloat(listcalcs[values])
+                            }
+                        }
+                    }
+                    let result = listcalcs.join('')
+                    if(result.includes('√')) {
+                        result = result.replace(/\√/g, "Math.sqrt")
+                    }
+
+                    if(result.includes('÷')) {
+                        result = result.replace(/\÷/g, "/")
+                    }
+
+                    if(result.includes('%')) {
+                        result = result.replace(/\%/g, "/100")
+                    }
+
+                    if(result.includes('^')) {
+                        result = result.replace(/\^/g, "**")
+                    }
+    
+                    result = eval(result)
+                    listcalcs.push(` ${value} `)
+                    listcalcs.push(`${result}`)
+                    setValor({...valorDisplay, valueReset: true, numbers: '0', calc: listcalcs  })
+                    break;
+                }
             default:
                 break;
         }
@@ -98,6 +185,7 @@ export default function Calculadora() {
         <div className={styles.content}>
             <div className={styles.content_main}>
                 <NavBar/>
+                <Display value={`O ultimo resultado: ${valorDisplay.memoryCalc}`} memory />
                 <Display value={valorDisplay.calc} historic/>
                 <Display value={valorDisplay.numbers}/>
                 <div className={styles.container_inputs}>
