@@ -31,11 +31,7 @@ export default function Calculadora() {
             } else {
                 numbers = numbers + value
             }
-            if (listcalcs.join('').includes('=')) {
-                setValor({...valorDisplay, valueReset: reset, numbers: numbers, calc: ["", ""], memoryCalc: listcalcs.join('') })
-            } else {
-                setValor({...valorDisplay, valueReset: reset, numbers: numbers})
-            }
+            setValor({...valorDisplay, valueReset: reset, numbers: numbers})
         }
     }
 
@@ -44,11 +40,7 @@ export default function Calculadora() {
         let memory  = valorDisplay.memoryCalc
         switch(value){
             case 'C':
-                if(memory != '0') {
-                    setValor({valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: memory})
-                } else {
-                    setValor({...init})
-                }
+                setValor({valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: memory})
                 break;
             case 'DEL':
                 if(numbers == '0' || numbers.length == 1) {
@@ -61,35 +53,37 @@ export default function Calculadora() {
             case '÷':
             case '-':
             case '+':
-                if(listcalcs[listcalcs.length - 1].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
-                   || listcalcs[listcalcs.length - 1].includes(')')) {
+                if((listcalcs[listcalcs.length - 1].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
+                   || listcalcs[listcalcs.length - 1].includes(')')) && !(numbers[numbers.length - 1].includes('.'))) {
                     listcalcs.push(` ${value} `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                } else if(reset == false) {
+                } else if(reset == false && !(numbers[numbers.length - 1].includes('.'))) {
                     listcalcs.push(numbers)
                     listcalcs.push(` ${value} `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs })
                 } 
                 break;    
             case '√':
-                if(reset == false && !numbers == '0') {
+                if(reset == false && !numbers == '0' && !(listcalcs[listcalcs.length - 1].includes('%')) && 
+                !(listcalcs[listcalcs.length - 1].includes('√')) && !(numbers[numbers.length - 1].includes('.'))) {
                     listcalcs.push(` √(${numbers}) `)
                     setValor({...valorDisplay, valueReset: false, numbers: '0' , calc: listcalcs }) 
                 }
                 break;
             case 'x^':
-                if(reset == false ) {
+                if ((listcalcs[listcalcs.length - 1].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
+                           || listcalcs[listcalcs.length - 1].includes(')')) && !(numbers[numbers.length - 1].includes('.'))){
+                    listcalcs.push(` ^ `)
+                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
+                } else if(reset == false && !(numbers[numbers.length - 1].includes('.')) ) {
                     listcalcs.push(numbers)
                     listcalcs.push(` ^ `)
                     setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                } else if (listcalcs[listcalcs.length - 2].includes('√') || listcalcs[listcalcs.length - 1].includes('%')
-                           || listcalcs[listcalcs.length - 1].includes(')')){
-                    listcalcs.push(` ^ `)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0' , calc: listcalcs }) 
-                }
+                } 
                 break;
             case '%':
-                if(reset == false ) {
+                if(reset == false && !(listcalcs[listcalcs.length - 1].includes('%')) && 
+                !(listcalcs[listcalcs.length - 1].includes('√')) && !(numbers[numbers.length - 1].includes('.'))) {
                     listcalcs.push(numbers)
                     listcalcs.push(`${value} `)
                     setValor({...valorDisplay, valueReset: false, numbers: '0' , calc: listcalcs }) 
@@ -106,12 +100,13 @@ export default function Calculadora() {
             case '(':
                 if (numbers == '0') {
                     if (listcalcs.join('').includes('=')) {
-                        setValor({...valorDisplay, valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: listcalcs.join('') })
-                    } else {
+                        listcalcs = ["", ""]
+                        listcalcs.push(value)
+                        setValor({...valorDisplay, valueReset: true, numbers: '0', calc: listcalcs, memoryCalc: listcalcs.join('') })
+                    } else if (!(listcalcs[listcalcs.length - 1].includes('%')) && !(listcalcs[listcalcs.length - 1].includes('√'))) {
                         listcalcs.push(value)
                         setValor({...valorDisplay, valueReset: true, numbers: '0', calc: listcalcs })
-                    }
-                    
+                    } 
                 }
                 break;
             case ')':
@@ -132,10 +127,8 @@ export default function Calculadora() {
                 }
                 break;
             case '=':
-                if(reset == false) {
-                    if(numbers != '0') {
-                        listcalcs.push(numbers)
-                    }
+                if((reset == false && !(numbers[numbers.length - 1].includes('.'))) || numbers == '0') {
+                    listcalcs.push(numbers)
                     if(listcalcs.join('').includes('(')) {
                         let barLeft = listcalcs.join('').split('(').length -1
                         let barRight = listcalcs.join('').split(')').length -1
@@ -173,7 +166,7 @@ export default function Calculadora() {
                     result = eval(result)
                     listcalcs.push(` ${value} `)
                     listcalcs.push(`${result}`)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0', calc: listcalcs  })
+                    setValor({...valorDisplay, valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: listcalcs.join('')  })
                     break;
                 }
             default:
