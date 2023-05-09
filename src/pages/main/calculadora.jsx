@@ -37,6 +37,7 @@ export default function Calculadora() {
 
     function valueOperation( value, reset, numbers ) {
         let listcalcs = [...valorDisplay.calc]
+        console.log()
         let memory  = valorDisplay.memoryCalc
         switch(value){
             case 'C':
@@ -172,7 +173,7 @@ export default function Calculadora() {
                     result = eval(result)
                     listcalcs.push(` ${value} `)
                     listcalcs.push(`${result}`)
-                    setValor({...valorDisplay, valueReset: true, numbers: '0', calc: ["", ""], memoryCalc: listcalcs.join('')  })
+                    setValor({...valorDisplay, valueReset: false, numbers: `${result}`, calc: ["", ""], memoryCalc: listcalcs.join('')  })
                     break;
                 }
             default:
