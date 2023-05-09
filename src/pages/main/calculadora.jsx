@@ -128,7 +128,7 @@ export default function Calculadora() {
                 break;
             case '=':
                 if((reset == false && !(numbers[numbers.length - 1].includes('.'))) || numbers == '0') {
-                    listcalcs.push(numbers)
+                    
                     if(listcalcs.join('').includes('(')) {
                         let barLeft = listcalcs.join('').split('(').length -1
                         let barRight = listcalcs.join('').split(')').length -1
@@ -139,6 +139,12 @@ export default function Calculadora() {
                             }
                         }
                     }
+
+                    if(!(listcalcs[listcalcs.length - 1].includes('√')) && !(listcalcs[listcalcs.length - 1].includes('%')) 
+                    && !(listcalcs[listcalcs.length - 1].includes(')'))) {
+                        listcalcs.push(numbers)
+                    }
+
                     if(listcalcs.join('').includes('0')) {
                         for( let values in listcalcs ) {
                             if(!isNaN(listcalcs[values]) && listcalcs[values] != '') {
