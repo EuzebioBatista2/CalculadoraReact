@@ -136,7 +136,8 @@ export default function Calculadora() {
                     listcalcs.push(numbers + '0')
                 } else if (
                     !(listcalcs[listcalcs.length - 2].includes('√')) && 
-                    !(listcalcs[listcalcs.length - 1].includes('%'))
+                    !(listcalcs[listcalcs.length - 1].includes('%')) &&
+                    !(listcalcs[listcalcs.length - 1].includes(')'))
                 ) {
                     listcalcs.push(numbers)
                 }
@@ -171,7 +172,11 @@ export default function Calculadora() {
                 }
 
                 if(result.includes('%')) {
-                    result = result.replace(/\%/g, "/100")
+                    let valuePorcent = result.match(/(\d+)%/g)
+                    valuePorcent.join('')
+                    valuePorcent = "(" + valuePorcent + ")"
+                    valuePorcent = valuePorcent.replace(/\%/g, "/100")
+                    result = result.replace(/(\d+)%/g, valuePorcent)
                 }
 
                 if(result.includes('^')) {
