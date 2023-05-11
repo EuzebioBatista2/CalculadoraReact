@@ -84,9 +84,13 @@ export default function Calculadora() {
                 break;
             case '%':
                 if(reset == false && !(listcalcs[listcalcs.length - 1].includes('%')) && 
-                !(listcalcs[listcalcs.length - 2].includes('√')) && !(numbers[numbers.length - 1].includes('.'))) {
-                    listcalcs.push(numbers)
-                    listcalcs.push(value)
+                !(numbers[numbers.length - 1].includes('.'))) {
+                    if(listcalcs[listcalcs.length - 2].includes('√')) {
+                        listcalcs.push(value)
+                    } else {
+                        listcalcs.push(numbers)
+                        listcalcs.push(value)
+                    }
                     setValor({...valorDisplay, valueReset: false, numbers: '0' , calc: listcalcs }) 
                 }
                 break;
