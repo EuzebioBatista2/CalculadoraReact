@@ -1,7 +1,7 @@
-import NavBar from '@/components/navBar'
-import Display from '@/components/Display'
+import NavBar from '../components/NavBar'
+import Display from '../components/Display'
 import styles from '../styles/calculadora.module.css'
-import Buttons from '@/components/Buttons'
+import Buttons from '../components/Buttons'
 import { useState } from 'react'
 
 const init = {
